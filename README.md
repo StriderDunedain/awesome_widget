@@ -1,2 +1,3 @@
-# bookish-octo-robot
-Project for Computer Science class
+# A simple widget for eng-rus translations
+Initially a project for Computer Science class but who knows what it can become...
+This is a pre-alpha version so it's very cringe!
