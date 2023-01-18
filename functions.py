@@ -53,9 +53,9 @@ def insert_word(eng_word=None, rus_word=None):
             INSERT INTO words VALUES
             ('{eng_word}', '{rus_word}');
         """)
-        logger.info(f'Word-pair {eng_word}:{rus_word} successfully added to database')
-    except OperationalError as error:
-        logger.error(f'OperationalError while inserting new values to db: {error}')
+        logger.info(f'Words {eng_word}:{rus_word} successfully added to db')
+    except OperationalError as e:
+        logger.error(f'OperationalError while inserting new values to db: {e}')
 
 
 def get_pair_eng(eng_word=None):
