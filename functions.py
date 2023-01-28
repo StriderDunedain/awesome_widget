@@ -10,8 +10,8 @@ By default:
 
 import logging
 import sqlite3
+from random import randint
 from sqlite3 import OperationalError
-from random import choice
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -31,7 +31,8 @@ cur = conn.cursor()
 try:
     cur.execute("""
         CREATE TABLE IF NOT EXISTS words
-        (eng_word TEXT NOT NULL UNIQUE,
+        (id INTEGER NOT NULL PRIMARY KEY,
+        eng_word TEXT NOT NULL UNIQUE,
         rus_word TEXT NOT NULL UNIQUE);
     """)
     logger.info('Connection established successfully...')
@@ -40,20 +41,63 @@ except OperationalError as error:
     exit()
 
 
+# Technical Functions
+
+def get_new_id():
+    try:
+        result = cur.execute("""SELECT MAX(id) FROM words""")
+        new_id = 0
+        for i in result:
+            new_id += i[0]
+        return new_id + 1
+    except OperationalError as error:
+        logger.critical(error)
+
+
+def db_len():
+    """Returns database's len"""
+    try:
+        result = cur.execute("""
+            SELECT *
+            FROM words;
+        """)
+        db_len = 0
+        for i in result:
+            db_len += 1
+        return db_len
+    except OperationalError as error:
+        logger.error(f'Something went wrong in the counting: {error}')
+
+# Executing Functions
+
+
 def insert_word(eng_word=None, rus_word=None):
     """Adds new word-pair to database"""
-    if eng_word is None or rus_word is None:
+    if None in (eng_word, rus_word):
         logger.error('Incorrect args for `insert_word` func')
         return None
-
+    db_id = get_new_id()
     try:
         cur.execute(f"""
             INSERT INTO words VALUES
-            ('{eng_word}', '{rus_word}');
+            ('{db_id}', '{eng_word}', '{rus_word}');
         """)
         logger.info(f'Words {eng_word}:{rus_word} successfully added to db')
     except OperationalError as e:
         logger.error(f'OperationalError while inserting new values to db: {e}')
+
+
+def delete_record(eng_word=None):
+    """Deletes a record from database. Arg is ONLY in English!"""
+    if eng_word is None:
+        logger.error('Not expected `eng_word` to equal None')
+        return None
+    try:
+        cur.execute(f"""
+            DELETE FROM words WHERE eng_word = '{eng_word}';
+        """)
+    except OperationalError as error:
+        logger.error(f'OperationalError while deleting from database: {error}')
 
 
 def rus_from_eng(eng_word=None):
@@ -95,31 +139,25 @@ def eng_from_rus(rus_word=None):
         logger.error(f'OperationalError while getting values from db: {error}')
 
 
-def get_all():
-    """Yields a tuple of eng:rus word pairs for all """
+def get_random():
+    """Gets a random pair of words"""
     try:
-        result = cur.execute("""
-                    SELECT *
-                    FROM words;
-                """)
-        for i in result:
-            yield choice(result)
+        db_count = db_len()
+        for i in range(db_count):
+            random_num = randint(1, db_count)
+            result = cur.execute(f"""
+                SELECT eng_word, rus_word
+                FROM words
+                WHERE id = '{random_num}';
+            """)
+            for i in result:
+                yield i
     except OperationalError as error:
-        logger.error(f'OperationalError while getting values from db: {error}')
+        logger.error(f'Something went wrong in the main func: {error}')
 
 
-def delete_record(eng_word=None):
-    """Deletes a record from database. Arg is ONLY in English!"""
-    if eng_word is None:
-        logger.error('Not expected `eng_word` to equal None')
-        return None
-    try:
-        cur.execute(f"""
-            DELETE FROM words WHERE eng_word = '{eng_word}';
-        """)
-    except OperationalError as error:
-        logger.error(f'OperationalError while deleting from database: {error}')
-
+for i in get_random():
+    print(i)
 
 conn.commit()
 logger.info('Connection closed successfully...')
