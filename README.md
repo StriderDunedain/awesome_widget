@@ -14,11 +14,13 @@ If you want to take part in this project or contribute to it, please reach out t
 5. Enjoy our product :)
 
 ## The Widget
-1. ![Main window](https://user-images.githubusercontent.com/93321964/215350195-072fc535-2595-4b63-8486-eb80e505b2a2.png)
-txt```
+1. Main window 
+  ![](https://user-images.githubusercontent.com/93321964/215350195-072fc535-2595-4b63-8486-eb80e505b2a2.png)
 
-2.![Widget for learning words](https://user-images.githubusercontent.com/93321964/215350269-00b045f2-eaea-410b-8273-6bc428e5c565.png)
+2. Widget for learning words 
+  ![](https://user-images.githubusercontent.com/93321964/215350269-00b045f2-eaea-410b-8273-6bc428e5c565.png)
 
-3.![Adding/deleting and showing whole dictionary you have](https://user-images.githubusercontent.com/93321964/215350311-cffd3ade-b498-4bd3-999f-bc80f485209a.png)
+3. Adding/deleting and showing whole dictionary you have 
+  ![](https://user-images.githubusercontent.com/93321964/215350311-cffd3ade-b498-4bd3-999f-bc80f485209a.png)
 
 This project is licensed under the terms of the MIT license.
