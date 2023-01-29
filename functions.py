@@ -50,7 +50,7 @@ def get_new_id():
         for i in result:
             new_id += i[0]
         return new_id + 1
-    except OperationalError as error:
+    except Exception as error:
         logger.critical(error)
 
 
@@ -65,8 +65,8 @@ def db_len():
         for i in result:
             db_len += 1
         return db_len
-    except OperationalError as error:
-        logger.error(f'Something went wrong in the counting: {error}')
+    except Exception as error:
+        logger.error(error)
 
 # Executing Functions
 
@@ -83,8 +83,8 @@ def insert_word(eng_word=None, rus_word=None):
             ('{db_id}', '{eng_word}', '{rus_word}');
         """)
         logger.info(f'Words {eng_word}:{rus_word} successfully added to db')
-    except OperationalError as e:
-        logger.error(f'OperationalError while inserting new values to db: {e}')
+    except Exception as error:
+        logger.error(error)
 
 
 def delete_record(eng_word=None):
@@ -96,8 +96,8 @@ def delete_record(eng_word=None):
         cur.execute(f"""
             DELETE FROM words WHERE eng_word = '{eng_word}';
         """)
-    except OperationalError as error:
-        logger.error(f'OperationalError while deleting from database: {error}')
+    except Exception as error:
+        logger.error(error)
 
 
 def rus_from_eng(eng_word=None):
@@ -116,8 +116,8 @@ def rus_from_eng(eng_word=None):
         russian_tuple = [i for i in data_sample][0]
         russian_word = russian_tuple[0]
         return russian_word
-    except OperationalError as error:
-        logger.error(f'OperationalError while getting values from db: {error}')
+    except Exception as error:
+        logger.error(error)
 
 
 def eng_from_rus(rus_word=None):
@@ -135,8 +135,8 @@ def eng_from_rus(rus_word=None):
         english_tuple = [i for i in data_sample][0]
         english_word = english_tuple[0]
         return english_word
-    except OperationalError as error:
-        logger.error(f'OperationalError while getting values from db: {error}')
+    except Exception as error:
+        logger.error(error)
 
 
 def get_random():
@@ -152,13 +152,18 @@ def get_random():
             """)
             for i in result:
                 yield i
-    except OperationalError as error:
-        logger.error(f'Something went wrong in the main func: {error}')
+    except Exception as error:
+        logger.error(error)
 
 
-for i in get_random():
-    print(i)
-
-conn.commit()
-logger.info('Connection closed successfully...')
-cur.close()
+def get_all():
+    """Return all values from database"""
+    try:
+        result = cur.execute(f"""
+            SELECT *
+            FROM words
+        """)
+        yield from result
+        
+    except Exception as error:
+        logger.error(error)
