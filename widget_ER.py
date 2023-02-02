@@ -1,6 +1,6 @@
 import tkinter
 
-from functions import conn, cur, get_random, logger
+from functions import get_random
 
 
 class Widget_ER:
@@ -16,10 +16,10 @@ class Widget_ER:
 
         # Создать и упаковать виджеты для рамки top_frame.
 
-        self.avg = tkinter.StringVar()
+        self.new = tkinter.StringVar()
 
         self.word = tkinter.Label(self.top_frame,
-                                  textvariable=self.avg)
+                                  textvariable=self.new)
 
         self.answer = tkinter.Entry(self.top_frame,
                                     width=10)
@@ -57,23 +57,18 @@ class Widget_ER:
         tkinter.mainloop()
 
     def convert(self):
-        if self.rus_word.lower() == self.answer.get().lower():
+        if self.r_word.lower() == self.answer.get().lower():
             self.value.set('Верно')
         else:
-            self.value.set(self.rus_word.lower())
+            self.value.set(self.r_word.lower())
 
     def set_value(self):
-        self.word_tuple = get_random()
-        for element in self.word_tuple:
-            self.eng_word = element[0].lower()
-            self.rus_word = element[1]
-            self.avg.set(self.eng_word)
+        for element in get_random():
+            self.e_word = element[0].lower()
+            self.r_word = element[1]
+            self.new.set(self.e_word)
             self.value.set('')
             self.answer.delete(0, 20)
 
-
+# if __name__ == '__main__':
 Widget_ER()
-
-conn.commit()
-logger.info('Connection closed successfully...')
-cur.close()

@@ -12,6 +12,7 @@ import logging
 import sqlite3
 from random import randint
 from sqlite3 import OperationalError
+from sys import stdout
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -21,7 +22,7 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger(__name__)
-handler = logging.FileHandler(filename='logs.log')
+handler = logging.StreamHandler(stream=stdout)
 logger.addHandler(handler)
 
 conn = sqlite3.connect('database.db')
@@ -159,11 +160,10 @@ def get_random():
 def get_all():
     """Return all values from database"""
     try:
-        result = cur.execute(f"""
+        result = cur.execute("""
             SELECT *
             FROM words
         """)
         yield from result
-        
     except Exception as error:
         logger.error(error)

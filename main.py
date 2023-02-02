@@ -1,7 +1,8 @@
 import tkinter
 
-from widget_ER import Widget_ER
 from dictionary import Dictionary
+from widget_ER import Widget_ER
+
 
 class GUI:
     def __init__(self):
@@ -61,8 +62,9 @@ class GUI:
         if choice == 1:
             Widget_ER()
         elif choice == 2:
-            Dictionary()
-        else:
             pass
+        elif choice == 3:
+            Dictionary()
 
-my_gui = GUI()
+if __name__ == '__main__':
+    GUI()

@@ -30,17 +30,17 @@ class Dictionary:
         self.text_2.pack(side = 'right')
         
         # Заполнение 2-ой рамки.
-        self.input_1 = tk.Entry(self.answer_frame,
+        self.r_word = tk.Entry(self.answer_frame,
                                 width = 10)
-        self.input_1.pack(side = 'right')
+        self.r_word.pack(side = 'right')
 
         self.n = tk.Label(self.answer_frame,
                           text = '------')
         self.n.pack(side = 'right')
         
-        self.input_2 = tk.Entry(self.answer_frame,
+        self.e_word = tk.Entry(self.answer_frame,
                                 width = 10)
-        self.input_2.pack(side = 'right')
+        self.e_word.pack(side = 'right')
         
         # Заполнение 3-ей рамки.
         self.button_1 = tk.Button(self.mid_frame,
@@ -67,18 +67,17 @@ class Dictionary:
         tk.mainloop()
 
     def save_words(self):
-        self.e_word = self.input_1.get()
-        self.r_word = self.input_2.get()
-        insert_word(self.e_word, self.r_word)
+        insert_word(eng_word=self.e_word.get(), rus_word=self.r_word.get())
+        conn.commit()
 
     def delete_words(self):
-        self.e_word = self.input_1.get()
-        delete_record(self.e_word)
+        delete_record(self.e_word.get())
+        conn.commit()
 
     def show_dictionary(self):
         self.main_window = tk.Tk()
         self.listbox = tk.Listbox(self.main_window)
-        self.listbox.pack(padx = 10, pady = 10)
+        self.listbox.pack(padx=10, pady=10)
         for word_tuple in get_all():
             index = word_tuple[0]
             words = word_tuple[1], ':', word_tuple[2]
@@ -86,9 +85,9 @@ class Dictionary:
         tk.mainloop()
 
 
-# if __name__ == '__main__':
-Dictionary()
+if __name__ == '__main__':
+    Dictionary()
 
-conn.commit()
-logger.info('Connection closed successfully...')
-cur.close()
+    conn.commit()
+    logger.info('Connection closed successfully...')
+    cur.close()
