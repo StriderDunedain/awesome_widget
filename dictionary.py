@@ -3,7 +3,8 @@ import tkinter as tk
 from functions import conn, cur, delete_record, get_all, insert_word, logger
 
 
-class Dictionary:    
+class Dictionary:
+ 
     def __init__(self):
         self.window = tk.Tk()
         # Создать 4 рамки.
